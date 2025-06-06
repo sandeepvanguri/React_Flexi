@@ -1,5 +1,5 @@
 import React from 'react';
-import BlogPostItem from './BlogPostItem';
+import BlogPostItem from './BlogPostItem.jsx';
 import styles from './BlogPostList.module.css';
 
 const BlogPostList = ({ posts }) => {
