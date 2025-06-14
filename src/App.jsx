@@ -3,6 +3,8 @@ import { Routes, Route, useParams, Link, useNavigate } from 'react-router-dom';
 import BlogPostList from './BlogPostList.jsx';
 import BlogPostDetail from './BlogPostDetail.jsx';
 import BlogPostForm from './BlogPostForm.jsx';
+import DeleteButton from './DeleteButton.jsx';
+import ConfirmationDialog from './ConfirmationDialog.jsx';
 
 const samplePosts = [
   {
@@ -34,20 +36,34 @@ const samplePosts = [
   }
 ];
 
-function BlogPostDetailWrapper({ posts }) {
+function BlogPostDetailWrapper({ posts, onDelete }) {
   const { id } = useParams();
   const post = posts.find(p => p.id === id);
+  const [showDialog, setShowDialog] = React.useState(false);
+  const navigate = useNavigate();
   if (!post) return <BlogPostDetail />;
   return (
     <div>
-      <div style={{ marginBottom: 16 }}>
+      <div style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
         <Link to="/">← Back to List</Link> | <Link to={`/posts/${id}/edit`}>Edit Post</Link>
+        <DeleteButton onClick={() => setShowDialog(true)} />
       </div>
       <BlogPostDetail
         title={post.title}
         content={post.content}
         author={post.author}
         date={post.date}
+      />
+      <ConfirmationDialog
+        open={showDialog}
+        title="Delete Blog Post"
+        message="Are you sure you want to delete this blog post? This action cannot be undone."
+        onConfirm={() => {
+          setShowDialog(false);
+          onDelete(id);
+          navigate('/');
+        }}
+        onCancel={() => setShowDialog(false)}
       />
     </div>
   );
@@ -119,6 +135,10 @@ const App = () => {
     setPosts(posts => posts.map(p => p.id === id ? { ...p, ...data } : p));
   };
 
+  const handleDelete = (id) => {
+    setPosts(posts => posts.filter(p => p.id !== id));
+  };
+
   return (
     <div>
       <h1>Blog Posts</h1>
@@ -129,7 +149,7 @@ const App = () => {
         <Route path="/" element={<BlogPostList posts={posts} />} />
         <Route path="/posts/new" element={<BlogPostCreateWrapper onCreate={handleCreate} />} />
         <Route path="/posts/:id/edit" element={<BlogPostEditWrapper posts={posts} onEdit={handleEdit} />} />
-        <Route path="/posts/:id" element={<BlogPostDetailWrapper posts={posts} />} />
+        <Route path="/posts/:id" element={<BlogPostDetailWrapper posts={posts} onDelete={handleDelete} />} />
       </Routes>
     </div>
   );
