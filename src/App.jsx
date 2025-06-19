@@ -5,6 +5,7 @@ import BlogPostDetail from './BlogPostDetail.jsx';
 import BlogPostForm from './BlogPostForm.jsx';
 import DeleteButton from './DeleteButton.jsx';
 import ConfirmationDialog from './ConfirmationDialog.jsx';
+import Layout from './Layout.jsx';
 
 const samplePosts = [
   {
@@ -140,7 +141,7 @@ const App = () => {
   };
 
   return (
-    <div>
+    <Layout>
       <h1>Blog Posts</h1>
       <div style={{ marginBottom: 24 }}>
         <Link to="/posts/new" style={{ background: '#007BFF', color: '#fff', padding: '8px 16px', borderRadius: 4, textDecoration: 'none' }}>+ New Post</Link>
@@ -151,7 +152,7 @@ const App = () => {
         <Route path="/posts/:id/edit" element={<BlogPostEditWrapper posts={posts} onEdit={handleEdit} />} />
         <Route path="/posts/:id" element={<BlogPostDetailWrapper posts={posts} onDelete={handleDelete} />} />
       </Routes>
-    </div>
+    </Layout>
   );
 };
 
