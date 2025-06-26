@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styles from './BlogPostDetail.module.css';
+import CommentSection from './CommentSection.jsx';
+
+const initialComments = [];
 
 const BlogPostDetail = ({ title, content, author, date }) => {
     const { id } = useParams();
+    const [comments, setComments] = useState(initialComments);
+
+    const handleAddComment = (comment) => {
+        setComments((prev) => [
+            ...prev,
+            { ...comment, id: Date.now() }
+        ]);
+    };
 
     if (!title || !content || !author || !date) {
         return <p>Blog post not found.</p>;
@@ -25,6 +36,12 @@ const BlogPostDetail = ({ title, content, author, date }) => {
                 dangerouslySetInnerHTML={{
                     __html: content,
                 }}
+            />
+            <CommentSection
+                comments={comments}
+                onAddComment={handleAddComment}
+                isLoggedIn={false}
+                userName=""
             />
         </div>
     );
