@@ -1,0 +1,30 @@
+/* SearchBar.module.css */
+.searchBar {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 24px auto;
+  display: flex;
+  justify-content: center;
+}
+.input {
+  width: 100%;
+  padding: 10px 16px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 24px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input:focus {
+  border-color: #007BFF;
+}
+@media (max-width: 768px) {
+  .searchBar {
+    max-width: 100%;
+    margin-bottom: 16px;
+  }
+  .input {
+    font-size: 15px;
+    padding: 8px 12px;
+  }
+}

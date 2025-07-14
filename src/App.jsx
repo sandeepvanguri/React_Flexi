@@ -6,6 +6,7 @@ import BlogPostForm from './BlogPostForm.jsx';
 import DeleteButton from './DeleteButton.jsx';
 import ConfirmationDialog from './ConfirmationDialog.jsx';
 import Layout from './Layout.jsx';
+import SearchBar from './SearchBar.jsx';
 
 const samplePosts = [
   {
@@ -122,6 +123,12 @@ function BlogPostEditWrapper({ posts, onEdit }) {
 
 const App = () => {
   const [posts, setPosts] = React.useState(samplePosts);
+  const [search, setSearch] = React.useState("");
+
+  const filteredPosts = posts.filter(post =>
+    post.title.toLowerCase().includes(search.toLowerCase()) ||
+    post.content.toLowerCase().includes(search.toLowerCase())
+  );
 
   const handleCreate = (data) => {
     const newPost = {
@@ -143,11 +150,12 @@ const App = () => {
   return (
     <Layout>
       <h1>Blog Posts</h1>
+      <SearchBar value={search} onChange={setSearch} />
       <div style={{ marginBottom: 24 }}>
         <Link to="/posts/new" style={{ background: '#007BFF', color: '#fff', padding: '8px 16px', borderRadius: 4, textDecoration: 'none' }}>+ New Post</Link>
       </div>
       <Routes>
-        <Route path="/" element={<BlogPostList posts={posts} />} />
+        <Route path="/" element={<BlogPostList posts={filteredPosts} />} />
         <Route path="/posts/new" element={<BlogPostCreateWrapper onCreate={handleCreate} />} />
         <Route path="/posts/:id/edit" element={<BlogPostEditWrapper posts={posts} onEdit={handleEdit} />} />
         <Route path="/posts/:id" element={<BlogPostDetailWrapper posts={posts} onDelete={handleDelete} />} />
